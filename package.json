@@ -1,9 +1,10 @@
 {
   "name": "pull-request-url-action",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Github action used to get information about Pull Requests that should be reported",
   "main": "index.js",
   "scripts": {
+    "package": "ncc build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,5 +27,8 @@
     "@actions/core": "^1.2.2",
     "@actions/github": "^2.1.1",
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "ncc": "^0.3.6"
   }
 }

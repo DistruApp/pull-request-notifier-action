@@ -9,17 +9,7 @@ inputs:
       read permissions
     default: ${{ github.token }}
     required: true
-  base-commit:
-    description: |
-      First commit SHA in range
-    default: ''
-    required: true
-  latest-commit:
-    description: |
-      Last commit SHA in range
-    default: ${{ '' }}
-    required: true
-  label:
+   label:
     description: |
       Label to check for on PRs.  If the label is present, information about the
       PR will be reported as an output.
@@ -30,8 +20,8 @@ outputs:
     description: |
       A list of objects containing information about PRs that should be reported
 runs:
-  using: "node16"
-  main: "index.js"
+  using: "node12"
+  main: "dist/index.js"
 branding:
   icon: "git-pull-request"
   color: "blue"
