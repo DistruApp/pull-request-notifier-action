@@ -42518,22 +42518,30 @@ async function run() {
 
         // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
         // remove first match because we don't want the whole PR body, only the links
-        const loomLinks = pr.body
-          .match(/\[.*\]\((https:\/\/www.loom.com.*)\)/)
-          .slice(1, -1);
+        const loomLinks = (
+          pr.body.match(/\[.*\]\((https:\/\/www\.loom\.com.*)\)/) || []
+        ).slice(1);
 
         core.info("Found loom links...");
-        core.info(JSON.stringify(pr.body));
+        core.info(JSON.stringify(loomLinks));
 
-        return {
+        const results = {
           authorLogin: pr.user.login,
           loomLinks,
           prLink: pr.url,
           prTitle: pr.title,
         };
+
+        core.info("Reporting PR information...");
+        core.info(JSON.stringify(results));
+
+        return results;
       });
 
-    core.setOutput("pull-request-information", JSON.stringify(informationToReport));
+    core.setOutput(
+      "pull-request-information",
+      JSON.stringify(informationToReport)
+    );
   } catch (error) {
     core.setFailed(error.message);
   }

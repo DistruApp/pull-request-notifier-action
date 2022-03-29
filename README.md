@@ -17,12 +17,13 @@ A list of objects containing information about PRs that should be reported
 ## Example usage
 
 ```
-- uses: kceb/pull-request-url-action@v1
-  label: reportme
-  base-commit: ${{ github.event.before }}
-  latest-commit:  ${{ github.event.after }}
+- name: Examine PRs
+  id: examine-prs
+  uses: DistruApp/pull-request-notifier-action@v0.0.16
+  with:
+    label: reportme
 
-- run: echo "${{ steps.pr-url.outputs.url }}"
+- run: echo "${{ steps.examine-prs.outputs.pull-request-information }}"
 ```
 
 For more info on how to use outputs: https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#steps-context
