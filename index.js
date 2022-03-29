@@ -23,14 +23,14 @@ async function run() {
       );
     }
 
-    core.info(compareResponse.data);
+    core.info(JSON.stringify(compareResponse.data));
   
     const commits = compareResponse.data.commits;
   
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
         core.info("Handling commit...");
-        core.info(commit);
+        core.info(JSON.stringify(commit));
         return await client.repos.listPullRequestsAssociatedWithCommit({
           owner: context.repo.owner,
           repo: context.repo.repo,
