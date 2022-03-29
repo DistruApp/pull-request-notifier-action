@@ -27,8 +27,7 @@ async function run() {
   
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
-        core.info("Handling commit...");
-        core.info(JSON.stringify(commit));
+        core.info(`Handling commit ${commit.sha}...`);
         return (await client.repos.listPullRequestsAssociatedWithCommit({
           owner: context.repo.owner,
           repo: context.repo.repo,
@@ -40,7 +39,7 @@ async function run() {
     core.info("Pull requests response...");
     core.info(JSON.stringify(pullRequests));
   
-    const uniquePullRequests = _.uniqBy(pullRequests, (pr) => pr.number);
+    const uniquePullRequests = _.uniqBy(_.flatten(pullRequests), (pr) => pr.number);
   
     const informationToReport = uniquePullRequests
       .filter((pr) =>
