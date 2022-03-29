@@ -22,8 +22,6 @@ async function run() {
           "Please submit an issue on this action's GitHub repo."
       );
     }
-
-    core.info(JSON.stringify(compareResponse.data));
   
     const commits = compareResponse.data.commits;
   
@@ -31,13 +29,16 @@ async function run() {
       commits.map(async (commit) => {
         core.info("Handling commit...");
         core.info(JSON.stringify(commit));
-        return await client.repos.listPullRequestsAssociatedWithCommit({
+        return (await client.repos.listPullRequestsAssociatedWithCommit({
           owner: context.repo.owner,
           repo: context.repo.repo,
-          commit: commit.tree.sha,
-        }).data;
+          commit: commit.sha,
+        })).data;
       })
     );
+
+    core.info("Pull requests response...");
+    core.info(JSON.stringify(pullRequests));
   
     const uniquePullRequests = _.uniqBy(pullRequests, (pr) => pr.number);
   
