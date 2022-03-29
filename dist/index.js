@@ -42478,12 +42478,12 @@ async function run() {
   
     if (compareResponse.status !== 200) {
       core.setFailed(
-        `The GitHub API for comparing the base and head commits for this ${context.eventName} event returned ${response.status}, expected 200. ` +
+        `The GitHub API for comparing the base and head commits for this ${context.eventName} event returned ${compareResponse.status}, expected 200. ` +
           "Please submit an issue on this action's GitHub repo."
       );
     }
   
-    const commits = response.data.commits;
+    const commits = compareResponse.data.commits;
   
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
