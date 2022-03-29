@@ -23,7 +23,7 @@ async function run() {
       );
     }
   
-    const commits = response.data.commits;
+    const commits = compareResponse.data.commits;
   
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
