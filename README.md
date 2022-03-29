@@ -12,7 +12,14 @@ each.  If those PRs are tagged with the specified label, it reports as outputs:
 
 ### `pull-request-information`
 
-A list of objects containing information about PRs that should be reported
+A list of objects of the form:
+
+{
+  authorLogin: string,
+  loomLinks: [string],
+  prLink: string,
+  prTitle: string
+}
 
 ## Example usage
 
@@ -27,3 +34,13 @@ A list of objects containing information about PRs that should be reported
 ```
 
 For more info on how to use outputs: https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#steps-context
+
+## How to publish
+
+Install `ncc` using homebrew.
+
+Check in the results of `npm run package`.
+
+Make an annotated tag. `git tag -a v1.0.0 -m v1.0.0`
+
+Push it all up. `git push origin --tags`
