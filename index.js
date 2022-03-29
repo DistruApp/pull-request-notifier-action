@@ -38,28 +38,22 @@ async function run() {
       })
     );
 
-    core.info("Pull requests response...");
-    core.info(JSON.stringify(pullRequests));
-
     const uniquePullRequests = _.uniqBy(
       _.flatten(pullRequests),
       (pr) => pr.number
     );
 
-    core.info("Unique pull requests...");
-    core.info(JSON.stringify(uniquePullRequests));
-
     const informationToReport = uniquePullRequests
       .filter((pr) => {
-        core.info("Filtering labels for PR...");
+        core.info(`Filtering labels for PR ${pr.number}...`);
         core.info(JSON.stringify(pr.labels));
-        
+
         return pr.labels.find(
           (label) => label.name === core.getInput("label", { required: true })
         );
       })
       .map((pr) => {
-        core.info("Filtering body for PR...");
+        core.info(`Filtering body for PR ${pr.number}...`);
         core.info(JSON.stringify(pr.body));
 
         // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
@@ -79,7 +73,7 @@ async function run() {
         };
       });
 
-    core.setOutput("pull-request-information", informationToReport);
+    core.setOutput("pull-request-information", JSON.stringify(informationToReport));
   } catch (error) {
     core.setFailed(error.message);
   }

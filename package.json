@@ -1,6 +1,6 @@
 {
   "name": "pull-request-url-action",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Github action used to get information about Pull Requests that should be reported",
   "main": "index.js",
   "scripts": {
