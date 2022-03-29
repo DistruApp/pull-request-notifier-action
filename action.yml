@@ -9,7 +9,7 @@ inputs:
       read permissions
     default: ${{ github.token }}
     required: true
-   label:
+  label:
     description: |
       Label to check for on PRs.  If the label is present, information about the
       PR will be reported as an output.
