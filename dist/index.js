@@ -42482,11 +42482,15 @@ async function run() {
           "Please submit an issue on this action's GitHub repo."
       );
     }
+
+    core.info(compareResponse.data);
   
     const commits = compareResponse.data.commits;
   
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
+        core.info("Handling commit...");
+        core.info(commit);
         return await client.repos.listPullRequestsAssociatedWithCommit({
           owner: context.repo.owner,
           repo: context.repo.repo,
