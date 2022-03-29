@@ -1,0 +1,30 @@
+{
+  "name": "pull-request-url-action",
+  "version": "0.0.1",
+  "description": "Github action used to get information about Pull Requests that should be reported",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DistruApp/pull-request-notifier-action.git"
+  },
+  "keywords": [
+    "pull-request",
+    "pr",
+    "action",
+    "github-actions"
+  ],
+  "author": "Tommy Chong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DistruApp/pull-request-notifier-action/issues"
+  },
+  "homepage": "https://github.com/DistruApp/pull-request-notifier-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.2",
+    "@actions/github": "^2.1.1",
+    "lodash": "^4.17.21"
+  }
+}

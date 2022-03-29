@@ -1,0 +1,37 @@
+name: "Pull Request Notifier"
+description: |
+  Given a set of commits, gets the Pull Requests for each and outputs a list of 
+  information for those which should be reported on
+inputs:
+  token:
+    description: |
+      OAuth token used to interact with the GitHub API. Must have commit status 
+      read permissions
+    default: ${{ github.token }}
+    required: true
+  base-commit:
+    description: |
+      First commit SHA in range
+    default: ''
+    required: true
+  latest-commit:
+    description: |
+      Last commit SHA in range
+    default: ${{ '' }}
+    required: true
+  label:
+    description: |
+      Label to check for on PRs.  If the label is present, information about the
+      PR will be reported as an output.
+    default: customer-facing
+    required: true
+outputs:
+  pull-request-information:
+    description: |
+      A list of objects containing information about PRs that should be reported
+runs:
+  using: "node16"
+  main: "index.js"
+branding:
+  icon: "git-pull-request"
+  color: "blue"
