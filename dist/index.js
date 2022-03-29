@@ -42492,7 +42492,7 @@ async function run() {
         return (await client.repos.listPullRequestsAssociatedWithCommit({
           owner: context.repo.owner,
           repo: context.repo.repo,
-          commit: commit.sha,
+          commit_sha: commit.sha,
         })).data;
       })
     );
