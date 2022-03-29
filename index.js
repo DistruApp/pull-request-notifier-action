@@ -5,55 +5,72 @@ const _ = require("lodash");
 async function run() {
   try {
     const client = new GitHub(core.getInput("token", { required: true }));
-  
+
     const base = context.payload.before;
     const head = context.payload.after;
-  
+
     const compareResponse = await client.repos.compareCommits({
       base,
       head,
       owner: context.repo.owner,
       repo: context.repo.repo,
     });
-  
+
     if (compareResponse.status !== 200) {
       core.setFailed(
         `The GitHub API for comparing the base and head commits for this ${context.eventName} event returned ${compareResponse.status}, expected 200. ` +
           "Please submit an issue on this action's GitHub repo."
       );
     }
-  
+
     const commits = compareResponse.data.commits;
-  
+
     const pullRequests = await Promise.all(
       commits.map(async (commit) => {
         core.info(`Handling commit ${commit.sha}...`);
-        return (await client.repos.listPullRequestsAssociatedWithCommit({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          commit_sha: commit.sha,
-        })).data;
+        return (
+          await client.repos.listPullRequestsAssociatedWithCommit({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: commit.sha,
+          })
+        ).data;
       })
     );
 
     core.info("Pull requests response...");
     core.info(JSON.stringify(pullRequests));
-  
-    const uniquePullRequests = _.uniqBy(_.flatten(pullRequests), (pr) => pr.number);
-  
+
+    const uniquePullRequests = _.uniqBy(
+      _.flatten(pullRequests),
+      (pr) => pr.number
+    );
+
+    core.info("Unique pull requests...");
+    core.info(JSON.stringify(uniquePullRequests));
+
     const informationToReport = uniquePullRequests
-      .filter((pr) =>
-        pr.labels.find(
+      .filter((pr) => {
+        core.info("Filtering labels for PR...");
+        core.info(JSON.stringify(pr.labels));
+        
+        return pr.labels.find(
           (label) => label.name === core.getInput("label", { required: true })
-        )
-      )
+        );
+      })
       .map((pr) => {
+        core.info("Filtering body for PR...");
+        core.info(JSON.stringify(pr.body));
+
         // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
         // remove first match because we don't want the whole PR body, only the links
         const loomLinks = pr.body
           .match(/\[.*\]\((https:\/\/www.loom.com.*)\)/)
           .slice(1, -1);
-  
+
+        core.info("Found loom links...");
+        core.info(JSON.stringify(pr.body));
+
         return {
           authorLogin: pr.user.login,
           loomLinks,
@@ -61,11 +78,11 @@ async function run() {
           prTitle: pr.title,
         };
       });
-  
+
     core.setOutput("pull-request-information", informationToReport);
   } catch (error) {
     core.setFailed(error.message);
-  }  
+  }
 }
 
 run();
