@@ -57,10 +57,13 @@ async function run() {
         core.info(JSON.stringify(pr.body));
 
         // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
-        // remove first match because we don't want the whole PR body, only the links
-        const loomLinks = (
-          pr.body.match(/\[.*\]\((https:\/\/www\.loom\.com.*)\)/) || []
-        ).slice(1);
+        const loomLinks = [];
+        for (let match of pr.body.matchAll(
+          /\[.*\]\((https:\/\/www\.loom\.com.*)\)/g
+        )) {
+          let [_full, key] = match;
+          loomLinks.push(key);
+        }
 
         core.info("Found loom links...");
         core.info(JSON.stringify(loomLinks));
