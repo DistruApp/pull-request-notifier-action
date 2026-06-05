@@ -29,6 +29,6 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "ncc": "^0.3.6"
+    "@vercel/ncc": "^0.38.4"
   }
 }

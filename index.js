@@ -58,7 +58,7 @@ async function run() {
 
         // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
         const loomLinks = [];
-        for (let match of pr.body.matchAll(
+        for (let match of (pr.body || "").matchAll(
           /\[.*\]\((https:\/\/www\.loom\.com.*)\)/g
         )) {
           let [_full, key] = match;
