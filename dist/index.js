@@ -71927,6 +71927,20 @@ const core = __nccwpck_require__(7484);
 const { context, GitHub } = __nccwpck_require__(3228);
 const _ = __nccwpck_require__(2356);
 
+// Extracts URLs from markdown links whose label matches `label`, e.g.
+// [Notion Ticket](https://www.notion.so/...) -> ["https://www.notion.so/..."].
+// The PR template ships these as empty placeholders (e.g. `[PRD]()`), so we
+// only capture links that actually point somewhere.
+function extractLabeledLinks(body, label) {
+  const links = [];
+  const pattern = new RegExp(`\\[${label}\\]\\((https?:\\/\\/[^)\\s]+)\\)`, "gi");
+  for (let match of (body || "").matchAll(pattern)) {
+    let [_full, url] = match;
+    links.push(url);
+  }
+  return links;
+}
+
 async function run() {
   try {
     const client = new GitHub(core.getInput("token", { required: true }));
@@ -71981,21 +71995,18 @@ async function run() {
         core.info(`Filtering body for PR ${pr.number}...`);
         core.info(JSON.stringify(pr.body));
 
-        // [some text](https://www.loom.com/share/2fb40c442cf8437c8a5bfd43e9a2e4b4)
-        const loomLinks = [];
-        for (let match of (pr.body || "").matchAll(
-          /\[.*\]\((https:\/\/www\.loom\.com.*)\)/g
-        )) {
-          let [_full, key] = match;
-          loomLinks.push(key);
-        }
+        const loomLinks = extractLabeledLinks(pr.body, "Loom");
+        const prdLinks = extractLabeledLinks(pr.body, "PRD");
+        const notionLinks = extractLabeledLinks(pr.body, "Notion Ticket");
 
-        core.info("Found loom links...");
-        core.info(JSON.stringify(loomLinks));
+        core.info("Found reportable links...");
+        core.info(JSON.stringify({ loomLinks, notionLinks, prdLinks }));
 
         const results = {
           authorLogin: pr.user.login,
           loomLinks,
+          notionLinks,
+          prdLinks,
           prLink: pr.url,
           prTitle: pr.title,
         };
