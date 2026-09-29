@@ -1,11 +1,12 @@
 # Pull Request Notifier Action
 
-This action accepts a list of commit SHAs and attempts to find the PR associated with
-each.  If those PRs are tagged with the specified label, it reports as outputs:
+Runs on `push`. Finds the PRs behind the commits between the push's `before` and
+`after`, looking them up in batches of 100 commits per GraphQL query. For PRs with
+the specified label, it reports as outputs:
 
 - The name of the PR
 - A link to the PR
-- Links to any Loom video(s) included in the PR body
+- Loom, PRD and Notion Ticket links included in the PR body
 - The name of the author
 
 ## Outputs
@@ -14,19 +15,23 @@ each.  If those PRs are tagged with the specified label, it reports as outputs:
 
 A list of objects of the form:
 
+```
 {
   authorLogin: string,
   loomLinks: [string],
-  prLink: string,
+  notionLinks: [string],
+  prdLinks: [string],
+  prLink: string, // https://github.com/<owner>/<repo>/pull/<number>
   prTitle: string
 }
+```
 
 ## Example usage
 
 ```
 - name: Examine PRs
   id: examine-prs
-  uses: DistruApp/pull-request-notifier-action@v0.0.16
+  uses: DistruApp/pull-request-notifier-action@v1.0.4
   with:
     label: reportme
 
